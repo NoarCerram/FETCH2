@@ -2,27 +2,33 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 export default function Home() {
   const [backendStatus, setBackendStatus] = useState<'checking' | 'connected' | 'error'>('checking')
   const [backendMessage, setBackendMessage] = useState('')
 
   useEffect(() => {
-    // Test connection to backend
-    const testBackend = async () => {
+    // Test connection to Supabase
+    const testSupabase = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-        const response = await fetch(`${apiUrl}/`)
-        const data = await response.json()
+        // Simple query to test connection
+        const { data, error } = await supabase
+          .from('articles')
+          .select('count', { count: 'exact', head: true })
+
+        if (error) throw error
+
         setBackendStatus('connected')
-        setBackendMessage(data.message)
+        setBackendMessage('Connected to Supabase!')
       } catch (error) {
         setBackendStatus('error')
-        setBackendMessage('Could not connect to backend')
+        setBackendMessage('Could not connect to Supabase')
+        console.error('Supabase connection error:', error)
       }
     }
 
-    testBackend()
+    testSupabase()
   }, [])
 
   return (
