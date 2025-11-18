@@ -3,49 +3,61 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-
-interface Article {
-  id: number
-  title: string
-  summary: string
-  url: string
-  published_at: string
-}
+import { supabase, type Article } from '@/lib/supabase'
 
 export default function Feed() {
   const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [userName, setUserName] = useState<string>('')
 
   useEffect(() => {
-    // Check if user is logged in
-    const userData = localStorage.getItem('user')
-    if (!userData) {
-      router.push('/auth/login')
-      return
-    }
-    setUser(JSON.parse(userData))
-
-    // Fetch articles
-    const fetchArticles = async () => {
+    // Check authentication and fetch data
+    const initializeFeed = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-        const response = await fetch(`${apiUrl}/articles`)
-        const data = await response.json()
-        setArticles(data.articles)
+        // Check if user is logged in
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+
+        if (sessionError || !session) {
+          router.push('/auth/login')
+          return
+        }
+
+        // Get user profile
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('name')
+          .eq('id', session.user.id)
+          .single()
+
+        if (profileError) {
+          console.error('Profile fetch error:', profileError)
+          setUserName(session.user.email?.split('@')[0] || 'User')
+        } else {
+          setUserName(profile.name)
+        }
+
+        // Fetch articles
+        const { data: articlesData, error: articlesError } = await supabase
+          .from('articles')
+          .select('*')
+          .order('published_at', { ascending: false })
+
+        if (articlesError) throw articlesError
+
+        setArticles(articlesData || [])
       } catch (error) {
-        console.error('Failed to fetch articles:', error)
+        console.error('Failed to initialize feed:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchArticles()
+    initializeFeed()
   }, [router])
 
-  const handleLogout = () => {
-    localStorage.removeItem('user')
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
     router.push('/')
   }
 
@@ -67,7 +79,7 @@ export default function Feed() {
           </Link>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">
-              Welcome, {user?.name}!
+              Welcome, {userName}!
             </span>
             <button
               onClick={handleLogout}
@@ -88,12 +100,12 @@ export default function Feed() {
           </p>
         </div>
 
-        {/* Coming Soon Notice */}
-        <div className="card mb-6 bg-blue-50 border border-blue-200">
-          <h3 className="font-semibold text-blue-900 mb-2">🚀 Phase 1.1 Complete!</h3>
-          <p className="text-sm text-blue-800">
-            Your account system is working! Next up: connecting to Supabase database
-            and adding real article scraping in Phase 2.
+        {/* Success Notice */}
+        <div className="card mb-6 bg-green-50 border border-green-200">
+          <h3 className="font-semibold text-green-900 mb-2">🎉 Phase 1 Complete!</h3>
+          <p className="text-sm text-green-800">
+            Your app is now live with Supabase! You have a working database, authentication,
+            and article feed. Next up: adding web scraping in Phase 2.
           </p>
         </div>
 

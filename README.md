@@ -4,7 +4,7 @@
 
 ![Status](https://img.shields.io/badge/Status-Phase%201-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Backend](https://img.shields.io/badge/Backend-FastAPI-009688)
+![Backend](https://img.shields.io/badge/Backend-Supabase-3ECF8E)
 ![Frontend](https://img.shields.io/badge/Frontend-Next.js%2014-black)
 
 **An intelligent web content aggregation and curation platform that delivers perfectly-sized, personalized content packages.**
@@ -31,14 +31,16 @@ FETCH solves **information overload** by intelligently discovering, filtering, a
 
 ## ✨ Features
 
-### Phase 1 (Current - MVP Core)
-- ✅ User authentication (signup/login)
-- ✅ Clean, responsive UI
+### Phase 1 (Current - MVP Core) ✅
+- ✅ User authentication via Supabase Auth
+- ✅ PostgreSQL database with Row Level Security
+- ✅ Clean, responsive UI (Tailwind CSS)
 - ✅ Article feed display
-- ✅ Cloud-first deployment (Railway + Vercel)
+- ✅ Cloud-first deployment (Supabase + Vercel)
+- ✅ **100% free to deploy and run!**
 
 ### Phase 2 (Next - Coming Soon)
-- 🔄 Web scraping engine (cascade pattern: HTTP → Playwright)
+- 🔄 Web scraping backend (FastAPI on Render)
 - 🔄 Article extraction (Trafilatura)
 - 🔄 Interest management system
 - 🔄 Rule-based content filtering
@@ -61,33 +63,35 @@ FETCH solves **information overload** by intelligently discovering, filtering, a
 
 ### For Beginners (No Coding Required)
 
-**Total Time: ~30 minutes**
+**Total Time: ~20 minutes**
 
-1. **Read** the [Getting Started Guide](GETTING_STARTED.md)
-2. **Deploy backend** to Railway (10 min)
+1. **Read** the [Supabase Deployment Guide](DEPLOY_SUPABASE.md)
+2. **Set up Supabase** database (5 min)
 3. **Deploy frontend** to Vercel (10 min)
 4. **Test** your live website (5 min)
 
-**That's it!** You'll have a live website with authentication.
+**That's it!** You'll have a live website with authentication, database, and sample articles!
 
 ### For Developers
 
-**Prerequisites:** Python 3.11+, Node.js 18+
+**Prerequisites:** Node.js 18+, Supabase account
 
 ```bash
 # Clone the repository
 git clone https://github.com/NoarCerram/FETCH2.git
 cd FETCH2
 
-# Backend setup
-cd backend
-pip install -r requirements.txt
-python main.py
-# Visit http://localhost:8000/docs
+# Set up Supabase (follow DEPLOY_SUPABASE.md for SQL setup)
 
-# Frontend setup (in new terminal)
+# Frontend setup
 cd frontend
 npm install
+
+# Create .env.local from template
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase credentials
+
+# Run development server
 npm run dev
 # Visit http://localhost:3000
 ```
@@ -98,23 +102,25 @@ npm run dev
 
 ```
 FETCH2/
-├── backend/                 # FastAPI backend
-│   ├── main.py             # Main API server
+├── backend/                 # FastAPI backend (Phase 2+)
+│   ├── main.py             # Scraping server (future)
 │   ├── requirements.txt    # Python dependencies
-│   ├── railway.json        # Railway config
 │   └── README.md           # Backend docs
 │
-├── frontend/               # Next.js frontend
+├── frontend/               # Next.js frontend ✅ ACTIVE
 │   ├── src/
-│   │   └── app/           # App router pages
-│   │       ├── page.tsx   # Home
-│   │       ├── auth/      # Login/Signup
-│   │       └── feed/      # Article feed
+│   │   ├── app/           # App router pages
+│   │   │   ├── page.tsx   # Home
+│   │   │   ├── auth/      # Login/Signup
+│   │   │   └── feed/      # Article feed
+│   │   └── lib/
+│   │       └── supabase.ts # Supabase client
 │   ├── package.json       # Node dependencies
 │   └── README.md          # Frontend docs
 │
-├── GETTING_STARTED.md     # Step-by-step beginner guide
+├── DEPLOY_SUPABASE.md     # 📘 START HERE - Deployment guide
 ├── BEGINNER_BUILD_PLAN.md # Detailed build roadmap
+├── GETTING_STARTED.md     # Alternative guide (Railway-based)
 ├── technical-brief.md     # Original technical spec
 └── README.md              # This file
 ```
@@ -123,28 +129,28 @@ FETCH2/
 
 ## 🛠️ Tech Stack
 
-### Backend
-- **Framework:** FastAPI (Python 3.11+)
-- **Database:** PostgreSQL 15+ (via Supabase)
-- **Cache:** Redis 7+
-- **Queue:** Celery (coming in Phase 4)
-- **Scraping:** HTTPX, Playwright, Trafilatura
-- **Auth:** JWT with python-jose
-
 ### Frontend
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **State:** Zustand
-- **HTTP:** Axios
+- **HTTP Client:** Supabase JS Client
+- **Hosting:** Vercel (free)
 
-### Infrastructure
-- **Backend Hosting:** Railway (free $5/month credit)
-- **Frontend Hosting:** Vercel (free unlimited)
-- **Database:** Supabase (free 500MB)
-- **Cache:** Upstash Redis (free 10k requests/day)
+### Backend (Phase 1 - Current)
+- **Database:** PostgreSQL 15+ (Supabase)
+- **Auth:** Supabase Auth (built-in JWT)
+- **API:** Auto-generated REST API (Supabase)
+- **Row Level Security:** PostgreSQL RLS
+- **Hosting:** Supabase (free)
 
-### AI/ML
+### Backend (Phase 2+ - Planned)
+- **Framework:** FastAPI (Python 3.11+)
+- **Scraping:** HTTPX, Playwright, Trafilatura
+- **Queue:** Celery (background jobs)
+- **Cache:** Redis (Upstash)
+- **Hosting:** Render.com (free 750hrs/month)
+
+### AI/ML (Phase 3+)
 - **Embeddings:** Sentence Transformers (all-MiniLM-L6-v2)
 - **Scoring:** Hybrid (50% semantic + 30% quality + 20% rules)
 
@@ -154,98 +160,135 @@ FETCH2/
 
 | Document | Description |
 |----------|-------------|
-| [GETTING_STARTED.md](GETTING_STARTED.md) | Complete deployment walkthrough for beginners |
+| [DEPLOY_SUPABASE.md](DEPLOY_SUPABASE.md) | **📘 START HERE** - Complete deployment walkthrough |
 | [BEGINNER_BUILD_PLAN.md](BEGINNER_BUILD_PLAN.md) | Phase-by-phase build roadmap |
+| [GETTING_STARTED.md](GETTING_STARTED.md) | Alternative guide (Railway-based, for Phase 2+) |
 | [technical-brief.md](technical-brief.md) | Original technical specification |
-| [backend/README.md](backend/README.md) | Backend API documentation |
 | [frontend/README.md](frontend/README.md) | Frontend setup and structure |
+| [backend/README.md](backend/README.md) | Backend API documentation (Phase 2+) |
 
 ---
 
 ## 🏗️ Architecture
 
+### Phase 1 (Current - Simplified):
 ```
-┌─────────────────┐
-│   Browser       │  ← User Interface (Next.js)
-└────────┬────────┘
-         │ HTTPS/REST API
-┌────────▼────────┐
-│   FastAPI       │  ← Application Logic
-└────────┬────────┘
-         │
-    ┌────┼────┬──────────┐
-    │    │    │          │
-┌───▼──┐ │ ┌──▼───┐  ┌──▼────┐
-│Celery│ │ │Redis │  │Scraper│
-│Worker│ │ │Cache │  │Engine │
-└──────┘ │ └──────┘  └───────┘
-         │
-    ┌────▼────┐
-    │PostgreSQL│  ← Data Storage
-    └─────────┘
+┌──────────────┐
+│   Browser    │  ← User Interface (Next.js on Vercel)
+└──────┬───────┘
+       │ Direct API calls (Supabase JS Client)
+┌──────▼────────┐
+│   SUPABASE    │  ← All-in-one backend
+│ ╔════════════╗│
+│ ║ PostgreSQL ║│  • User profiles
+│ ╚════════════╝│  • Articles
+│ ╔════════════╗│  • User interests
+│ ║   Auth     ║│  • Saved articles
+│ ╚════════════╝│
+│ ╔════════════╗│
+│ ║  REST API  ║│  • Auto-generated
+│ ╚════════════╝│  • Row Level Security
+└───────────────┘
+```
+
+**Benefits:**
+- ✅ No backend to deploy
+- ✅ Built-in authentication
+- ✅ Real-time subscriptions
+- ✅ Completely free
+- ✅ Scales to 50k users
+
+### Phase 2+ (Planned - Full Stack):
+```
+┌──────────────┐
+│   Browser    │  ← Next.js (Vercel)
+└──────┬───────┘
+       │
+   ┌───┴────────────┐
+   │                │
+┌──▼───────┐  ┌────▼──────┐
+│Supabase  │  │  FastAPI  │  ← Scraping backend (Render)
+│ Database │  │  +Celery  │     • Web scraping
+│ + Auth   │  └────┬──────┘     • Background jobs
+└──────────┘       │             • AI ranking
+              ┌────▼────┐
+              │  Redis  │  ← Job queue & cache (Upstash)
+              └─────────┘
 ```
 
 ---
 
 ## 💰 Cost Breakdown
 
-### Development
-- **Tools:** $0 (all open-source)
-- **Local testing:** $0
+### Phase 1 Deployment (0-1,000 users) - **Current**
+- **Vercel (frontend):** $0 (free unlimited for personal use)
+- **Supabase (database + auth):** $0 (free 500MB, 50k auth users, 2GB bandwidth)
 
-### MVP Deployment (0-1,000 users)
-- **Railway (backend):** $0 (covered by free credit)
-- **Vercel (frontend):** $0 (free tier)
-- **Supabase (database):** $0 (free 500MB)
+**Total: $0/month** ✨
+
+### Phase 2+ Deployment (1,000-10,000 users)
+- **Vercel:** $0 (still free)
+- **Supabase:** $0 (free tier sufficient)
+- **Render (scraper):** $0 (free 750 hours/month)
 - **Upstash (Redis):** $0 (free 10k requests/day)
 
-**Total: $0/month** for first few months!
+**Total: Still $0/month!** 🎉
 
-### Growth (1K-10K users)
-- **Railway:** $20-30/month
-- **Vercel:** $0 (still free)
+### Growth (10K-100K users)
+- **Vercel:** $20/month (Pro plan)
 - **Supabase:** $25/month (Pro tier)
+- **Render:** $7/month (Starter)
 - **Upstash:** $10/month
 
-**Total: ~$55-65/month**
+**Total: ~$62/month**
 
 ---
 
 ## 🎯 Build Phases
 
-### ✅ Phase 1: Foundation (Weeks 1-2) - **Current**
-- [x] FastAPI backend with basic auth
-- [x] Next.js frontend with login/signup
-- [x] Cloud deployment (Railway + Vercel)
-- [x] Documentation for beginners
+### ✅ Phase 1: Foundation (Week 1) - **COMPLETE**
+- [x] Supabase database setup
+- [x] PostgreSQL tables (users, articles, interests)
+- [x] Row Level Security policies
+- [x] Next.js frontend with Tailwind CSS
+- [x] Authentication (signup/login via Supabase)
+- [x] Article feed display
+- [x] Vercel deployment
+- [x] Complete documentation
 
-### 🔄 Phase 2: Scraping (Weeks 3-4) - **Next**
-- [ ] HTTP scraper with Beautiful Soup
+**Status:** 🎉 **YOU CAN DEPLOY THIS NOW!**
+
+### 🔄 Phase 2: Scraping (Week 2-3) - **Next**
+- [ ] FastAPI scraping server
+- [ ] Beautiful Soup + HTTPX
 - [ ] Article extraction (Trafilatura)
-- [ ] Save articles to database
-- [ ] Display in feed
+- [ ] Save scraped articles to Supabase
+- [ ] Deploy to Render.com
 
-### 📅 Phase 3: Interests (Weeks 5-6)
-- [ ] Interest management UI
+### 📅 Phase 3: Interests (Week 4-5)
+- [ ] Interest selection UI
 - [ ] Keyword-based filtering
-- [ ] User preferences storage
+- [ ] User preference storage
+- [ ] Filter feed by interests
 
-### 📅 Phase 4: Automation (Weeks 7-8)
-- [ ] Background job scheduling
-- [ ] Automatic article fetching
+### 📅 Phase 4: Automation (Week 6-7)
+- [ ] Celery background jobs
+- [ ] Scheduled article fetching
 - [ ] Multiple source support
+- [ ] Redis caching
 
 ### 📅 Phase 5+: Advanced Features
-- [ ] AI-powered ranking
+- [ ] AI-powered ranking (Sentence Transformers)
 - [ ] Information trails
 - [ ] PWA capabilities
-- [ ] Social features
+- [ ] Social sharing
+- [ ] Premium features
 
 ---
 
 ## 🤝 Contributing
 
-This is currently a solo project, but contributions are welcome once Phase 2 is complete!
+This is currently a solo project in active development. Contributions welcome after Phase 2!
 
 **Interested in helping?**
 1. Fork the repository
@@ -265,40 +308,59 @@ MIT License - See [LICENSE](LICENSE) for details
 
 ### Having Issues?
 
-1. Check [GETTING_STARTED.md](GETTING_STARTED.md) troubleshooting section
-2. Review [backend/README.md](backend/README.md) or [frontend/README.md](frontend/README.md)
+1. Check [DEPLOY_SUPABASE.md](DEPLOY_SUPABASE.md) troubleshooting section
+2. Review [frontend/README.md](frontend/README.md) for frontend-specific issues
 3. Open an issue with:
    - What you were trying to do
    - What happened instead
    - Error messages (if any)
-   - Your environment (Railway/Vercel URLs)
+   - Screenshots (if helpful)
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] **Q4 2024:** Phase 1 - Core setup
-- [ ] **Q1 2025:** Phases 2-3 - Scraping & Interests
-- [ ] **Q2 2025:** Phase 4-5 - Automation & AI
-- [ ] **Q3 2025:** Beta launch with 100 users
-- [ ] **Q4 2025:** Public launch
+- [x] **Nov 2024:** Phase 1 - Core setup with Supabase ✅
+- [ ] **Dec 2024:** Phase 2 - Web scraping
+- [ ] **Jan 2025:** Phase 3 - Interests system
+- [ ] **Feb 2025:** Phase 4 - Automation & AI
+- [ ] **Mar 2025:** Beta launch with 100 users
+- [ ] **Q2 2025:** Public launch
 
 ---
 
 ## 📊 Status
 
-**Current Phase:** 1.1 - Core Deployment ✅
+**Current Phase:** 1 - Complete ✅
 
 **What's Working:**
-- Backend API on Railway
-- Frontend website on Vercel
-- User signup/login
-- Basic feed display
+- ✅ Supabase database with 4 tables
+- ✅ Row Level Security policies
+- ✅ User signup/login via Supabase Auth
+- ✅ Article feed from database
+- ✅ Frontend on Vercel
+- ✅ Sample articles pre-loaded
+- ✅ 100% free deployment
 
 **What's Next:**
-- Phase 1.2: Connect Supabase database
-- Phase 2: Add web scraping
-- Phase 3: Implement interests
+- Phase 2: Add web scraping backend on Render
+- Fetch real articles from web
+- Implement interest filtering
+
+---
+
+## 🚀 Ready to Deploy?
+
+Follow these steps:
+
+1. **Read** [DEPLOY_SUPABASE.md](DEPLOY_SUPABASE.md)
+2. **Create** Supabase account and project (5 min)
+3. **Run** SQL setup script (copy-paste)
+4. **Deploy** frontend to Vercel (10 min)
+5. **Test** your live website!
+
+**Total time:** ~20 minutes
+**Total cost:** $0
 
 ---
 
@@ -307,5 +369,7 @@ MIT License - See [LICENSE](LICENSE) for details
 **Built with ❤️ by [NoarCerram](https://github.com/NoarCerram)**
 
 [⭐ Star this repo](https://github.com/NoarCerram/FETCH2) if you find it useful!
+
+**Questions? Open an issue or check the [documentation](#-documentation)!**
 
 </div>

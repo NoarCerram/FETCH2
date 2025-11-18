@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 export default function Login() {
   const router = useRouter()
@@ -19,23 +20,15 @@ export default function Login() {
     setLoading(true)
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await fetch(`${apiUrl}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      // Sign in with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
       })
 
-      const data = await response.json()
+      if (authError) throw authError
 
-      if (!response.ok) {
-        throw new Error(data.detail || 'Login failed')
-      }
-
-      // Success! Store user info and redirect to feed
-      localStorage.setItem('user', JSON.stringify(data.user))
+      // Success! Redirect to feed
       router.push('/feed')
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
