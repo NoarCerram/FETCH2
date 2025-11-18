@@ -1,0 +1,26 @@
+# FETCH Backend Dependencies
+# These will be installed automatically by Railway
+
+# ===== PHASE 1: Core Backend =====
+fastapi==0.104.1        # Web framework
+uvicorn[standard]==0.24.0  # Server to run FastAPI
+pydantic==2.5.0         # Data validation
+python-multipart==0.0.6 # Form data handling
+
+# ===== PHASE 1.2: Database & Auth =====
+# supabase==2.3.0       # Uncomment when ready for Supabase
+# python-jose[cryptography]==3.3.0  # JWT tokens
+# passlib[bcrypt]==1.7.4  # Password hashing
+
+# ===== PHASE 2: Scraping (Coming Soon) =====
+# httpx==0.25.2         # HTTP client for fetching pages
+# beautifulsoup4==4.12.2  # HTML parsing
+# lxml==4.9.3           # XML/HTML parser (faster)
+# trafilatura==1.6.2    # Article extraction
+
+# ===== PHASE 4: Background Jobs (Coming Soon) =====
+# celery==5.3.4         # Task queue
+# redis==5.0.1          # Caching and job broker
+
+# ===== Production =====
+gunicorn==21.2.0        # Production server
