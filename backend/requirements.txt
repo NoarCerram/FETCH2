@@ -12,7 +12,7 @@ supabase==2.3.0         # Supabase Python client
 postgrest==0.13.0       # PostgreSQL REST API client (used by Supabase)
 
 # ===== Web Scraping =====
-httpx==0.25.2           # Modern HTTP client (async support)
+httpx==0.24.1           # Modern HTTP client (async support) - compatible with supabase 2.3.0
 beautifulsoup4==4.12.2  # HTML parsing
 lxml==4.9.3             # XML/HTML parser (faster than html.parser)
 trafilatura==1.6.2      # Article extraction (F1 score: 0.958)
