@@ -8,8 +8,8 @@ pydantic==2.5.0         # Data validation
 python-multipart==0.0.6 # Form data handling
 
 # ===== Database & Auth =====
-supabase==2.3.0         # Supabase Python client
-postgrest==0.13.0       # PostgreSQL REST API client (used by Supabase)
+supabase==2.9.1         # Supabase Python client (updated for httpx 0.24 compatibility)
+# postgrest version will be determined by supabase
 
 # ===== Web Scraping =====
 httpx==0.24.1           # Modern HTTP client (async support) - compatible with supabase 2.3.0
