@@ -1,26 +1,33 @@
-# FETCH Backend Dependencies
-# These will be installed automatically by Railway
+# FETCH Backend Dependencies - Phase 2: Web Scraping
+# These will be installed automatically by Render
 
-# ===== PHASE 1: Core Backend =====
+# ===== Core Backend =====
 fastapi==0.104.1        # Web framework
 uvicorn[standard]==0.24.0  # Server to run FastAPI
 pydantic==2.5.0         # Data validation
 python-multipart==0.0.6 # Form data handling
 
-# ===== PHASE 1.2: Database & Auth =====
-# supabase==2.3.0       # Uncomment when ready for Supabase
-# python-jose[cryptography]==3.3.0  # JWT tokens
-# passlib[bcrypt]==1.7.4  # Password hashing
+# ===== Database & Auth =====
+supabase==2.3.0         # Supabase Python client
+postgrest==0.13.0       # PostgreSQL REST API client (used by Supabase)
 
-# ===== PHASE 2: Scraping (Coming Soon) =====
-# httpx==0.25.2         # HTTP client for fetching pages
-# beautifulsoup4==4.12.2  # HTML parsing
-# lxml==4.9.3           # XML/HTML parser (faster)
-# trafilatura==1.6.2    # Article extraction
+# ===== Web Scraping =====
+httpx==0.25.2           # Modern HTTP client (async support)
+beautifulsoup4==4.12.2  # HTML parsing
+lxml==4.9.3             # XML/HTML parser (faster than html.parser)
+trafilatura==1.6.2      # Article extraction (F1 score: 0.958)
+html5lib==1.1           # HTML5 parser (backup)
 
-# ===== PHASE 4: Background Jobs (Coming Soon) =====
+# ===== Utilities =====
+python-dateutil==2.8.2  # Date parsing
+
+# ===== Production =====
+gunicorn==21.2.0        # Production WSGI server
+
+# ===== Phase 4: Background Jobs (Coming Soon) =====
 # celery==5.3.4         # Task queue
 # redis==5.0.1          # Caching and job broker
 
-# ===== Production =====
-gunicorn==21.2.0        # Production server
+# ===== Phase 4: Advanced Scraping (Coming Soon) =====
+# playwright==1.40.0    # Browser automation for JavaScript sites
+# selenium==4.15.0      # Alternative browser automation
